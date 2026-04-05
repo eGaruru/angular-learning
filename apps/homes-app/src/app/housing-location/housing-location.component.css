@@ -1,10 +1,28 @@
-/* Put these styles in: src/app/housing-location/housing-location.component.css */
-
 .listing {
+  position: relative;
   background: var(--accent-color);
   border-radius: 30px;
   padding-bottom: 30px;
 }
+.listing-favourite {
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.favourite-icon {
+  height: 32px;
+  width: 32px;
+  fill: var(--primary-color);
+  transition: transform 0.15s ease-in-out;
+}
+.favourite-icon.is-active {
+  transform: scale(1.1);
+}
+
 .listing-heading {
   color: var(--primary-color);
   padding: 10px 20px 0 20px;

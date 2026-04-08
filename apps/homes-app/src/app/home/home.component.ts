@@ -25,6 +25,8 @@ import { HousingService } from "../housing.service";
       @for (housingLocation of filteredLocationList; track housingLocation.id) {
         <app-housing-location
           [housingLocation]="housingLocation"
+          [isFavourite]="checkIsFavourite(housingLocation.id)"
+          (toggleFavourite)="toggleFavourite($event, housingLocation)"
         ></app-housing-location>
       }
     </section>
@@ -35,6 +37,7 @@ export class HomeComponent {
   housingLocationList: HousingLocation[] = [];
   housingService: HousingService = inject(HousingService);
   filteredLocationList: HousingLocation[] = [];
+  favouriteList = this.getFavouriteList();
 
   constructor() {
     this.housingService
@@ -54,5 +57,30 @@ export class HomeComponent {
           .toLocaleLowerCase()
           .includes(text.toLocaleLowerCase()),
     );
+  }
+
+  checkIsFavourite(id: number) {
+    return this.favouriteList.some((fav) => fav.id === id);
+  }
+
+  getFavouriteList(): HousingLocation[] {
+    try {
+      return JSON.parse(localStorage.getItem("favouriteList") ?? "[]");
+    } catch {
+      return [];
+    }
+  }
+
+  toggleFavourite(isFavourite: boolean, housingLocation: HousingLocation) {
+    const prevList = this.favouriteList;
+    const isExistInList = this.checkIsFavourite(housingLocation.id);
+
+    const updateList =
+      isFavourite && !isExistInList
+        ? [...prevList, housingLocation]
+        : prevList.filter((fav) => fav.id !== housingLocation.id);
+
+    localStorage.setItem("favouriteList", JSON.stringify(updateList));
+    this.favouriteList = updateList;
   }
 }

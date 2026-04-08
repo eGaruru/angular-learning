@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { HousingLocation } from "../housing-location";
 
@@ -9,11 +9,7 @@ import { HousingLocation } from "../housing-location";
   imports: [CommonModule, RouterModule],
   template: `
     <section class="listing">
-      <button
-        type="button"
-        class="listing-favourite"
-        (click)="isFavourite = !isFavourite"
-      >
+      <button type="button" class="listing-favourite" (click)="onToggleClick()">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 -960 960 960"
@@ -45,5 +41,11 @@ import { HousingLocation } from "../housing-location";
 })
 export class HousingLocationComponent {
   @Input() housingLocation!: HousingLocation;
-  isFavourite = false;
+  @Input() isFavourite!: boolean;
+
+  @Output() toggleFavourite = new EventEmitter<boolean>();
+
+  onToggleClick() {
+    this.toggleFavourite.emit(!this.isFavourite);
+  }
 }
